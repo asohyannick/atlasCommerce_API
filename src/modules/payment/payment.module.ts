@@ -4,10 +4,12 @@ import { PaymentService } from "./payment.service";
 import { PaymentController } from "./payment.controller";
 import { Payment, PaymentSchema } from "./entity/payment.entity";
 import { AuthModule } from "../auth/auth.module";
+import { UserModule } from "../user/user.module";
 @Module({
     imports: [
         MongooseModule.forFeature([{ name: Payment.name, schema: PaymentSchema }]),
-        AuthModule
+        AuthModule,
+        UserModule,
     ],
     providers: [PaymentService],
     controllers: [PaymentController],
