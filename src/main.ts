@@ -26,7 +26,7 @@ async function bootstrap() {
   app.setGlobalPrefix(`api/${apiVersion}`);
 
   const configService = app.get(ConfigService);
-  const appPort = configService.get<number>('APP_PORT') || 8500;
+  const appPort = configService.get<number>('PORT') || 3000;
   const appHost = configService.get<string>('APP_HOST') || 'http://localhost';
 
   // CORS setup
