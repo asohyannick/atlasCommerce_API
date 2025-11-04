@@ -13,6 +13,7 @@ import { WishlistModule } from './modules/wishlist/wishlist.module';
 import { ReviewModule } from './modules/review/review.module';
 import { PromotionModule } from './modules/promotion/promotion.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
+import { SupportModule } from './modules/customerSupport/support.module';
 @Module({
   imports: [
     DatabaseModule,
@@ -28,6 +29,7 @@ import { AnalyticsModule } from './modules/analytics/analytics.module';
     ReviewModule,
     PromotionModule,
     AnalyticsModule,  
+    SupportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET_KEY,
       signOptions: { expiresIn: '15m' },
