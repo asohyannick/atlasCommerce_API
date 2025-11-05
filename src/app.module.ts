@@ -21,6 +21,7 @@ import { ContentModule } from './modules/content/content.module';
 import { FaqModule } from './modules/faq/faq.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
 import { TaxModule } from './modules/taxes/tax.module';
+import { ShippingZoneModule } from './modules/shippingZone/shippingZone.module';
 @Module({
   imports: [
     DatabaseModule,
@@ -44,6 +45,7 @@ import { TaxModule } from './modules/taxes/tax.module';
     FaqModule,
     InventoryModule,
     TaxModule,
+    ShippingZoneModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET_KEY,
       signOptions: { expiresIn: '15m' },
