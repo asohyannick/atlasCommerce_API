@@ -4,10 +4,12 @@ import { Tax, TaxSchema } from './entity/tax.entity';
 import { TaxController } from './tax.controller';
 import { TaxService } from './tax.service';
 import { AuthModule } from '../auth/auth.module';
+import { UserModule } from '../user/user.module';
 @Module({
     imports: [
         MongooseModule.forFeature([{ name: Tax.name, schema: TaxSchema }]),
         AuthModule,
+        UserModule,
     ],
     controllers: [TaxController],
     providers: [TaxService],

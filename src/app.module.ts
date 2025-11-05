@@ -22,6 +22,8 @@ import { FaqModule } from './modules/faq/faq.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
 import { TaxModule } from './modules/taxes/tax.module';
 import { ShippingZoneModule } from './modules/shippingZone/shippingZone.module';
+import { GiftRegistryModule } from './modules/giftRegistry/giftRegistry.module';
+import { AffiliateModule } from './modules/affiliate/affiliate.module';
 @Module({
   imports: [
     DatabaseModule,
@@ -46,6 +48,8 @@ import { ShippingZoneModule } from './modules/shippingZone/shippingZone.module';
     InventoryModule,
     TaxModule,
     ShippingZoneModule,
+    GiftRegistryModule,
+    AffiliateModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET_KEY,
       signOptions: { expiresIn: '15m' },

@@ -5,8 +5,12 @@ import { ShippingService } from './shipping.service';
 import { Shipping } from "./entity/shipping.entity";
 import { ShippingSchema } from "./entity/shipping.entity";
 import { AuthModule } from "../auth/auth.module";
+import { UserModule } from "../user/user.module";
 @Module({
-    imports: [MongooseModule.forFeature([{ name: Shipping.name, schema: ShippingSchema }]), AuthModule],
+    imports: [MongooseModule.forFeature([{ name: Shipping.name, schema: ShippingSchema }]),
+        AuthModule,
+        UserModule,
+    ],
     controllers: [ShippingController],
     providers: [ShippingService],
     exports: [ShippingService],

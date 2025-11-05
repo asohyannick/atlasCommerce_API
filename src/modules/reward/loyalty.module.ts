@@ -5,6 +5,7 @@ import { LoyaltyPoints, LoyaltyPointsSchema } from './entity/loyaltyPoints.entit
 import { LoyaltyController } from './loyal.controller';
 import { LoyaltyService } from './loyalty.service';
 import { AuthModule } from '../auth/auth.module';
+import { UserModule } from '../user/user.module';
 @Module({
     imports: [
         MongooseModule.forFeature([
@@ -12,6 +13,7 @@ import { AuthModule } from '../auth/auth.module';
             { name: LoyaltyPoints.name, schema: LoyaltyPointsSchema },
         ]),
         AuthModule,
+        UserModule,
     ],
     controllers: [LoyaltyController],
     providers: [LoyaltyService],
