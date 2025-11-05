@@ -19,6 +19,8 @@ import { GiftCardModule } from './modules/giftCard/giftCard.module';
 import { LoyaltyModule } from './modules/reward/loyalty.module';
 import { ContentModule } from './modules/content/content.module';
 import { FaqModule } from './modules/faq/faq.module';
+import { InventoryModule } from './modules/inventory/inventory.module';
+import { TaxModule } from './modules/taxes/tax.module';
 @Module({
   imports: [
     DatabaseModule,
@@ -40,6 +42,8 @@ import { FaqModule } from './modules/faq/faq.module';
     LoyaltyModule,
     ContentModule,
     FaqModule,
+    InventoryModule,
+    TaxModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET_KEY,
       signOptions: { expiresIn: '15m' },
