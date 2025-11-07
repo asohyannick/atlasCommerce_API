@@ -7,6 +7,7 @@ import * as bcrypt from "bcryptjs";
 import * as jwt from 'jsonwebtoken';
 import * as nodemailer from 'nodemailer';
 import { randomInt } from "crypto";
+import { Response } from "express";
 import { assignRoleBasedOnEmail } from "../../common/utils/roleHelper";
 @Injectable()
 export class UserService {
@@ -26,7 +27,11 @@ export class UserService {
         return randomInt(100000, 1000000).toString();
     }
 
-    async register(createUserDto: CreateUserDto): Promise<{ user: User, tokens: { accessToken: string, refreshToken: string } }> {
+    async register(
+
+        createUserDto: CreateUserDto,
+        res: Response
+    ): Promise<{ user: User, tokens: { accessToken: string, refreshToken: string } }> {
 
         const existingUser = await this.userModel.findOne({ email: createUserDto.email });
         if (existingUser) throw new ConflictException("User with this email already exist!");
@@ -51,6 +56,19 @@ export class UserService {
         });
         user.refreshToken = refreshToken;
         await user.save();
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 15 * 60 * 1000, // 15 minutes
+        });
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        });
         return {
             user,
             tokens: {
@@ -61,7 +79,8 @@ export class UserService {
     }
 
     async login(
-        loginUserDto: LoginUserDto
+        loginUserDto: LoginUserDto,
+        res: Response
     ): Promise<{ user: User; tokens: { accessToken: string; refreshToken: string } }> {
 
         const MAX_FAILED_LOGIN_ATTEMPTS = 5;
@@ -112,6 +131,20 @@ export class UserService {
         user.refreshToken = refreshToken;
         await user.save();
 
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 15 * 60 * 1000, // 15 minutes
+        });
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        });
+
         return {
             user,
             tokens: { accessToken, refreshToken },
@@ -136,11 +169,13 @@ export class UserService {
         return user;
     }
 
-    async logout(userId: string): Promise<User> {
+    async logout(userId: string, res: Response): Promise<User> {
         const user = await this.userModel.findById(userId);
         if (!user) throw new NotFoundException('User not found!');
         user.refreshToken = '';
         await user.save();
+        res.clearCookie('accessToken');
+        res.clearCookie('refreshToken')
         return user;
     }
 
@@ -244,5 +279,4 @@ export class UserService {
 
         return user;
     }
-
 }

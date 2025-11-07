@@ -7,6 +7,7 @@ import { CreateShoppingCartDto } from "./dto/createShoppingCartDto";
 import { UpdateShoppingCartDto } from "./dto/updateShoppingCartDto";
 import { ShoppingCartService } from './shoppingCart.service';
 import { UserRole } from "../../common/enum/roles.enum";
+import { User } from "../user/entities/user.entity";
 @ApiTags('Shopping-Cart Management Endpoints')
 @Controller('shopping-cart')
 export class ShoppingCartController {
@@ -14,7 +15,7 @@ export class ShoppingCartController {
     constructor(private readonly shoppingCartService: ShoppingCartService) { };
 
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+    @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.CUSTOMER)
     @Post('create-cart')
     @HttpCode(HttpStatus.CREATED)
     @ApiResponse({ status: 201, description: "Shopping cart created successfully" })
@@ -71,15 +72,15 @@ export class ShoppingCartController {
     @ApiResponse({ status: 200, description: "Item has been added to the shopping cart successfully" })
     async addItemToCart(
         @Param('cartId') cartId: string,
-        @Body() body: { productId: string; quantity: number }
+        @Body() body: { productId: string; quantity: number, price: number }
     ) {
-        const cart = await this.shoppingCartService.addItemToCart(cartId, body.productId, body.quantity);
+        const cart = await this.shoppingCartService.addItemToCart(cartId, body.productId, body.quantity, body.price);
         return { success: true, message: "Item has been added to the shopping cart successfully", data: cart };
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.CUSTOMER)
-    @Delete('remove-item/:cartId')
+    @Post('remove-item/:cartId')
     @HttpCode(HttpStatus.OK)
     @ApiResponse({ status: 200, description: "Item has been removed from the shopping cart successfully" })
     async removeItemFromCart(

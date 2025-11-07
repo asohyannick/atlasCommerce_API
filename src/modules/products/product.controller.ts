@@ -10,7 +10,6 @@ import { UserRole } from '../../common/enum/roles.enum';
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) { }
-  // Only ADMIN or SUPER_ADMIN can create products
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   @ApiBody({ type: CreateProductDto })

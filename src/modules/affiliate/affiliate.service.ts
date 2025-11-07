@@ -4,7 +4,6 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Affiliate } from "./entity/affiliate.entity";
 import { CreateAffiliateDto } from "./dto/CreateAffiliateDto";
 import { UpdateAffiliateDto } from "./dto/UpdateAffiliateDto";
-
 @Injectable()
 export class AffiliateService {
     constructor(@InjectModel(Affiliate.name) private readonly affiliateModel: Model<Affiliate>) {}

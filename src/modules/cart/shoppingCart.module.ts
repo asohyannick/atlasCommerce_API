@@ -1,14 +1,19 @@
-import { Module } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ShoppingCart, ShoppingCartSchema } from "./entity/shoppingCartEntity";
 import { ShoppingCartService } from './shoppingCart.service';
 import { ShoppingCartController } from './shoppingCart.controller';
 import { AuthModule } from "../auth/auth.module";
 import { UserModule } from "../user/user.module";
+import { ProductModule } from "../products/products.module";
+import { Product, ProductSchema } from "../products/entities/product.entity";
 @Module({
-    imports: [MongooseModule.forFeature([{ name: ShoppingCart.name, schema: ShoppingCartSchema }]),
+    imports: [MongooseModule.forFeature([{ name: ShoppingCart.name, schema: ShoppingCartSchema },
+        { name: Product.name, schema: ProductSchema },
+    ]),
         UserModule,
-        AuthModule
+        AuthModule,
+        forwardRef(() => ProductModule),
     ],
     controllers: [ShoppingCartController],
     providers: [ShoppingCartService],

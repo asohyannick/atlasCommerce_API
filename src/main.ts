@@ -5,22 +5,31 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import compression from 'compression';
+import { rateLimit } from 'express-rate-limit';
+import cookieParser from 'cookie-parser';
+import { AllExceptionsFilter } from './common/exception/globalException';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  app.use(cookieParser());    
   // Security headers
   app.use(helmet());
 
   // Compression middleware
   app.use(compression());
-
+    app.use(rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    standardHeaders: 'draft-8',
+    legacyHeaders: false,
+  }))
+    app.useGlobalFilters(new AllExceptionsFilter());
   // Global validation pipe
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
     forbidNonWhitelisted: true,
     transform: true,
   }));
-
+  
   // API versioning
   const apiVersion = process.env.API_VERSION || 'v1';
   app.setGlobalPrefix(`api/${apiVersion}`);
